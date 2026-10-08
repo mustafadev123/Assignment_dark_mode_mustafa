@@ -3,7 +3,7 @@
    Runs the "Find a therapist" page: filtering, sorting, the
    booking popup, and the list of booked appointments.
    No database yet, so the therapists are hard coded below and
-   bookings are saved in localStorage.
+   bookings are saved in localStorage
    ========================================================== */
 
 // fake therapists for now, every name here is made up
