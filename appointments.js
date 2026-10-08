@@ -224,7 +224,7 @@ function save_appointments(list) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   } catch (e) {
-    // saving failed, the booking just will not be remembered after a reload
+    console.error('Could not save appointments to localStorage', e);
   }
 }
 
