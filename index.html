@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- landing page for PantherWell, the student wellness site for Georgia State -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PantherWell | Wellness support for Georgia State students</title>
+
+  <!-- all the colors and layout live in this one stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<!-- the body gets the dark_mode class when the dark theme is on -->
+<body>
+
+  <!-- top bar: logo, links, and the theme button -->
+  <header class="site-header">
+    <a class="brand" href="index.html">PantherWell</a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="appointments.html">Find a therapist</a>
+    </nav>
+
+    <!-- script.js looks for this id, so please do not rename it -->
+    <button id="theme_toggler" class="toggle-btn" type="button" aria-pressed="false">
+      Switch to dark theme
+    </button>
+  </header>
+
+  <main>
+    <!-- hero: tell students what this is and send them to booking -->
+    <section class="hero">
+      <h1>Talk to someone who understands student life at Georgia State.</h1>
+      <p>
+        Browse counselors and therapists, filter by what you need help with,
+        and book a time that fits around your classes.
+      </p>
+      <div class="cta">
+        <a class="primary-btn" href="appointments.html">Find a therapist</a>
+        <a class="link" href="#how-it-works">See how it works</a>
+      </div>
+    </section>
+
+    <!-- these steps really do happen in order, so numbers make sense here -->
+    <section id="how-it-works" class="steps">
+      <h2>How booking works</h2>
+      <ol>
+        <li><strong>Filter.</strong> Pick a topic, a language, or a session type.</li>
+        <li><strong>Compare.</strong> Read short profiles and check open times.</li>
+        <li><strong>Book.</strong> Choose a slot and confirm. You can cancel any time.</li>
+      </ol>
+    </section>
+
+    <!-- a quick look at what the project is growing into -->
+    <section class="features">
+      <h2>What PantherWell is building</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Therapist search</h3>
+          <p>Filters, ratings, and appointment booking. This part is live in the demo.</p>
+        </article>
+        <article class="card">
+          <h3>Mood tracking and journal</h3>
+          <p>A private place to check in with yourself between sessions.</p>
+        </article>
+        <article class="card">
+          <h3>Campus events</h3>
+          <p>Wellness events around campus with a simple RSVP.</p>
+        </article>
+        <article class="card">
+          <h3>Community forum</h3>
+          <p>Posts and replies from other students who get it.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>If you are in crisis, call or text 988 (Suicide and Crisis Lifeline). In an emergency, call 911.</p>
+  </footer>
+
+  <!-- the script goes last so the button above already exists when it runs -->
+  <script src="script.js"></script>
+</body>
+</html>

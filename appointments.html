@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!-- appointment page: students filter therapists and book a slot -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a therapist | PantherWell</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- same top bar as the landing page so the site feels consistent -->
+  <header class="site-header">
+    <a class="brand" href="index.html">PantherWell</a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="appointments.html" aria-current="page">Find a therapist</a>
+    </nav>
+
+    <button id="theme_toggler" class="toggle-btn" type="button" aria-pressed="false">
+      Switch to dark theme
+    </button>
+  </header>
+
+  <main>
+    <section class="page-intro">
+      <h1>Find a therapist</h1>
+      <p class="muted">
+        These profiles are sample data for now, so every name here is made up.
+        Real therapists will show up once the database is connected.
+      </p>
+    </section>
+
+    <div class="layout">
+
+      <!-- left side: all the filters plus the student's own bookings -->
+      <aside class="sidebar">
+
+        <form id="filters" class="panel" aria-label="Therapist filters">
+          <h2>Filters</h2>
+
+          <label class="field">
+            <span>Search by name or topic</span>
+            <input type="search" name="search" placeholder="Try anxiety or Priya">
+          </label>
+
+          <label class="field">
+            <span>What do you want to talk about?</span>
+            <select name="specialty"><option value="all">Any topic</option></select>
+          </label>
+
+          <label class="field">
+            <span>Language</span>
+            <select name="language"><option value="all">Any language</option></select>
+          </label>
+
+          <label class="field">
+            <span>Session type</span>
+            <select name="format">
+              <option value="all">Video or in person</option>
+              <option value="video">Video call</option>
+              <option value="in-person">In person</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Available on</span>
+            <select name="day">
+              <option value="all">Any weekday</option>
+              <option value="Mon">Monday</option>
+              <option value="Tue">Tuesday</option>
+              <option value="Wed">Wednesday</option>
+              <option value="Thu">Thursday</option>
+              <option value="Fri">Friday</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Minimum rating</span>
+            <select name="rating">
+              <option value="0">Any rating</option>
+              <option value="4.5">4.5 and up</option>
+              <option value="4.7">4.7 and up</option>
+              <option value="4.9">4.9 and up</option>
+            </select>
+          </label>
+
+          <label class="check">
+            <input type="checkbox" name="accepting">
+            <span>Only show therapists taking new students</span>
+          </label>
+
+          <label class="field">
+            <span>Sort by</span>
+            <select name="sort">
+              <option value="rating">Highest rated</option>
+              <option value="experience">Most experience</option>
+              <option value="name">Name</option>
+            </select>
+          </label>
+
+          <button id="reset_filters" class="toggle-btn" type="button">Clear all filters</button>
+        </form>
+
+        <!-- bookings show up here after a student confirms one -->
+        <section class="panel" aria-labelledby="my_title">
+          <h2 id="my_title">Your appointments</h2>
+          <div id="my_appointments"></div>
+        </section>
+      </aside>
+
+      <!-- right side: the therapist cards get filled in by appointments.js -->
+      <section aria-labelledby="results_title">
+        <h2 id="results_title" class="results-title">Therapists</h2>
+        <p id="result_count" class="muted" aria-live="polite"></p>
+        <div id="results"></div>
+        <p id="empty_state" class="empty" hidden>
+          No therapists match those filters. Try removing one or two.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- booking popup, opened from the "Book a session" buttons -->
+  <dialog id="booking_dialog" aria-labelledby="dialog_title">
+    <form id="booking_form">
+      <h2 id="dialog_title"></h2>
+
+      <fieldset>
+        <legend>Pick a time</legend>
+        <div id="dialog_slots"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>How would you like to meet?</legend>
+        <div id="dialog_formats" class="format-options"></div>
+      </fieldset>
+
+      <p id="dialog_error" class="error" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button id="dialog_cancel" class="toggle-btn" type="button">Cancel</button>
+        <button class="primary-btn" type="submit">Confirm booking</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- small message that pops up after booking or canceling -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <p>If you are in crisis, call or text 988 (Suicide and Crisis Lifeline). In an emergency, call 911.</p>
+  </footer>
+
+  <!-- script.js handles the theme, appointments.js handles filtering and booking -->
+  <script src="script.js"></script>
+  <script src="appointments.js"></script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+/* ==========================================================
+   styles.css
+   Colors are CSS variables. The light theme sits in :root and
+   the dark theme just overrides the same names in .dark_mode.
+   ========================================================== */
+
+/* light theme, this is what people see first */
+:root {
+  --body-bg: #f4f7fc;
+  --surface-bg: #ffffff;
+  --text-color: #101a2e;
+  --muted-text: #50607a;
+  --accent: #0039a6;
+  --accent-text: #ffffff;
+  --border-color: #d6deec;
+  --tag-bg: #e6edfb;
+  --error: #b3261e;
+  --shadow: 0 2px 10px rgba(16, 26, 46, 0.08);
+}
+
+/* dark theme, same variable names with different values */
+.dark_mode {
+  --body-bg: #0b1220;
+  --surface-bg: #141f33;
+  --text-color: #e9eefb;
+  --muted-text: #9fb0cf;
+  --accent: #7aa7ff;
+  --accent-text: #08142e;
+  --border-color: #26344f;
+  --tag-bg: #1d2d4d;
+  --error: #ff8a80;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- basics ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: var(--body-bg);
+  /* fade between themes instead of snapping */
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted-text);
+}
+
+/* ---------- header ---------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  padding: 1rem 2rem;
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.brand {
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 1.25rem;
+  margin-right: auto; /* pushes the theme button to the far right */
+}
+
+.nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a[aria-current="page"] {
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- buttons ---------- */
+.toggle-btn,
+.primary-btn {
+  display: inline-block;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.toggle-btn {
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--border-color);
+}
+
+.toggle-btn:hover {
+  border-color: var(--accent);
+}
+
+.primary-btn {
+  color: var(--accent-text);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+/* keyboard users need to see where they are */
+.toggle-btn:focus-visible,
+.primary-btn:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- page layout ---------- */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ---------- landing page ---------- */
+.hero {
+  padding: 2rem 0 3rem;
+  max-width: 44rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0 0 1rem;
+}
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--muted-text);
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.steps ol {
+  padding-left: 1.25rem;
+  max-width: 44rem;
+}
+
+.steps li {
+  margin-bottom: 0.5rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  padding: 1.25rem;
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted-text);
+}
+
+/* ---------- appointment page ---------- */
+.page-intro h1 {
+  margin-bottom: 0.25rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.sidebar {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* only stick the sidebar on wide screens, on phones it would eat the page */
+@media (min-width: 801px) {
+  .sidebar {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  padding: 1.25rem;
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+/* form fields */
+.field {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.field span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  font: inherit;
+  padding: 0.5rem;
+  color: var(--text-color);
+  background: var(--body-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.check {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.check input {
+  margin-top: 0.35rem;
+}
+
+/* results */
+.results-title {
+  margin: 0;
+}
+
+#results {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.therapist {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem 1.25rem;
+  padding: 1.25rem;
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* round badge with the therapist's initials */
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-family: Georgia, serif;
+  font-weight: bold;
+  color: var(--accent);
+  background: var(--tag-bg);
+}
+
+.therapist h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.creds {
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: var(--muted-text);
+}
+
+.therapist p {
+  margin: 0.25rem 0;
+}
+
+.rating {
+  font-weight: bold;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.tags li {
+  padding: 0.15rem 0.6rem;
+  font-size: 0.85rem;
+  background: var(--tag-bg);
+  border-radius: 999px;
+}
+
+.therapist .details {
+  font-size: 0.95rem;
+  color: var(--muted-text);
+}
+
+.therapist .action {
+  margin-top: 0.75rem;
+}
+
+.empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--muted-text);
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+}
+
+/* your appointments list */
+.appt {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+.appt:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.appt button {
+  align-self: center;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+}
+
+/* ---------- booking popup ---------- */
+dialog {
+  width: calc(100% - 2rem);
+  max-width: 540px;
+  padding: 1.5rem;
+  color: var(--text-color);
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+dialog::backdrop {
+  background: rgba(5, 10, 20, 0.6);
+}
+
+dialog h2 {
+  margin-top: 0;
+}
+
+fieldset {
+  margin: 0 0 1rem;
+  padding: 0;
+  border: none;
+}
+
+legend {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+#dialog_slots {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.slot-date {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
+.slots,
+.format-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* the real radio buttons are hidden, the span next to them looks like a chip */
+.slot input,
+.format-options input {
+  position: absolute;
+  opacity: 0;
+}
+
+.slot span,
+.format-options span {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.slot input:checked + span,
+.format-options input:checked + span {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.slot input:focus-visible + span,
+.format-options input:focus-visible + span {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* slots that are already booked */
+.slot input:disabled + span {
+  opacity: 0.45;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.error {
+  min-height: 1.5rem;
+  margin: 0 0 0.5rem;
+  color: var(--error);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ---------- toast message ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translate(-50%, 150%);
+  padding: 0.75rem 1.25rem;
+  color: var(--accent-text);
+  background: var(--accent);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.toast.show {
+  transform: translate(-50%, 0);
+}
+
+/* ---------- footer ---------- */
+.site-footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: var(--muted-text);
+  border-top: 1px solid var(--border-color);
+}
+
+/* people who turned on reduce motion get no animations */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .site-header,
+  .card,
+  .panel,
+  .therapist,
+  .toast {
+    transition: none;
+  }
+}
