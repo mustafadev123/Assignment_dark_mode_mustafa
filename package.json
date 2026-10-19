@@ -1,0 +1,13 @@
+{
+  "name": "pantherwell",
+  "version": "1.0.0",
+  "description": "PantherWell site with a MySQL connection test",
+  "main": "servermysqlsimple.js",
+  "scripts": {
+    "start": "node servermysqlsimple.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  }
+}
