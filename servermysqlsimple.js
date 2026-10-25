@@ -1,8 +1,47 @@
 const express = require("express"); //imports the express module
 const crypto = require("crypto"); //built in module, used to hash passwords
+const session = require("express-session"); //remembers who is logged in between pages
 const app = express(); //creates the express application object
 app.use(express.urlencoded({ extended: true })); //lets us read form fields from req.body
-app.use(express.static("public"));//register public as the directory for static files
+
+//gives each browser a cookie so we know who they are on the next request
+//without SESSION_SECRET set, a new secret is made on every start, which logs everyone out
+app.use(session({
+	secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString("hex"),
+	resave: false,
+	saveUninitialized: false, //no cookie until someone actually logs in
+	cookie: { httpOnly: true, sameSite: "lax" } //page scripts cannot read the cookie
+}));
+
+//pages you have to be logged in to see
+const protectedPages = ["/index.html", "/appointments.html"];
+//pages that only make sense when you are logged out
+const guestPages = ["/register.html", "/login.html"];
+
+//the landing page: new visitors start at register, logged in users go home
+app.get("/", function(req, res)
+{
+	res.redirect(req.session.username ? "/index.html" : "/register.html");
+});
+
+//runs before the static files so a locked page is never sent to a logged out visitor
+app.use(function(req, res, next)
+{
+	let loggedIn = Boolean(req.session.username);
+	if(protectedPages.includes(req.path))
+	{
+		if(!loggedIn)
+			return res.redirect("/login.html");
+		//stops the back button showing a cached copy after logging out
+		res.set("Cache-Control", "no-store");
+	}
+	if(guestPages.includes(req.path) && loggedIn)
+		return res.redirect("/index.html"); //already logged in, nothing to do here
+	next();
+});
+
+//index: false so "/" uses the redirect above instead of serving index.html directly
+app.use(express.static("public", { index: false }));//register public as the directory for static files
 
 const mysql = require("mysql2"); //uses new mysql package
 //set ROOTPASS if your root user has a password, otherwise it stays blank
@@ -36,14 +75,22 @@ function escapeHtml(text)
 	});
 }
 
+//how long the success pages wait before moving on by themselves
+const redirectSeconds = 3;
+
 //wraps a short message in a page that uses the site styles and theme button
-function messagePage(title, message, linkHref, linkText)
+//pass autoRedirect = true to send the user to linkHref after a few seconds
+function messagePage(title, message, linkHref, linkText, autoRedirect)
 {
+	//meta refresh does the redirect without needing any javascript
+	let refresh = autoRedirect ? `<meta http-equiv="refresh" content="${redirectSeconds};url=${linkHref}">` : "";
+	let countdown = autoRedirect ? `<p class="muted">Taking you there in ${redirectSeconds} seconds...</p>` : "";
 	return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${refresh}
   <title>${title} | PantherWell</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -56,6 +103,7 @@ function messagePage(title, message, linkHref, linkText)
     <section class="panel">
       <h1>${title}</h1>
       <p>${message}</p>
+      ${countdown}
       <a class="primary-btn" href="${linkHref}">${linkText}</a>
     </section>
   </main>
@@ -95,11 +143,27 @@ app.post("/register", function(req, res)
 			return res.status(500).send(messagePage("Registration failed",
 				"Something went wrong on our end. Please try again.", "register.html", "Try again"));
 		}
-		//it worked, point them at the login page
+		//it worked, send them to the login page next
 		res.send(messagePage("Registered",
-			"You have successfully registered, " + escapeHtml(username) + ".", "login.html", "Log in here"));
+			"You have successfully registered, " + escapeHtml(username) + ".", "login.html", "Log in here", true));
 	});
 });
+
+//remembers the user in their session, called by /login once the password checks out
+function logIn(req, username, done)
+{
+	//get a fresh session id first so an old one cannot be reused
+	req.session.regenerate(function(err)
+	{
+		if(err)
+		{
+			console.log("Could not start a session", err);
+			return done(err);
+		}
+		req.session.username = username;
+		done(null);
+	});
+}
 
 //login.html posts here
 app.post("/login", function(req, res)
@@ -130,9 +194,31 @@ app.post("/login", function(req, res)
 		if(stored.length !== attempt.length || !crypto.timingSafeEqual(stored, attempt))
 			return res.status(401).send(failed);
 
-		//password matched
-		res.send(messagePage("Welcome back",
-			"You have logged in successfully, " + escapeHtml(username) + ".", "index.html", "Go to home page"));
+		//password matched, remember them and send them home
+		logIn(req, username, function(err)
+		{
+			if(err)
+				return res.status(500).send(messagePage("Login failed",
+					"Something went wrong on our end. Please try again.", "login.html", "Back to login"));
+			res.send(messagePage("Welcome back",
+				"You have logged in successfully, " + escapeHtml(username) + ".", "index.html", "Go to home page", true));
+		});
+	});
+});
+
+//script.js calls this on every page to decide what the nav should show
+app.get("/me", function(req, res)
+{
+	res.json({ username: req.session.username || null });
+});
+
+//forget the user and send them back to log in
+app.get("/logout", function(req, res)
+{
+	req.session.destroy(function()
+	{
+		res.clearCookie("connect.sid"); //connect.sid is the cookie name express-session uses
+		res.redirect("/login.html");
 	});
 });
 

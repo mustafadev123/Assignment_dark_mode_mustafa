@@ -535,3 +535,8 @@ legend {
   margin-top: 0;
   font-size: 1.5rem;
 }
+
+/* the "Hi, name" text in the nav once someone logs in */
+.nav .greeting {
+  color: var(--muted-text);
+}

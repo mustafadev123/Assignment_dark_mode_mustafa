@@ -61,3 +61,36 @@ window.addEventListener('storage', function () {
 
 // run once on load so the saved theme shows up right away
 retrieve_theme();
+
+/* ----------------------------------------------------------
+   Logged in state
+   Asks the server who is logged in, then adds a greeting and
+   a Log out link to the nav. The server already keeps logged
+   out visitors off the pages where this shows up.
+   ---------------------------------------------------------- */
+
+// adds the greeting and Log out link for whoever is logged in
+function update_nav(username) {
+  var nav = document.querySelector('.nav');
+  if (!nav || !username) {
+    return; // no nav on this page, or nobody is logged in, so leave it alone
+  }
+
+  // textContent, not innerHTML, so a strange username cannot inject html
+  var greeting = document.createElement('span');
+  greeting.className = 'greeting';
+  greeting.textContent = 'Hi, ' + username;
+
+  var logout = document.createElement('a');
+  logout.href = '/logout';
+  logout.textContent = 'Log out';
+
+  nav.appendChild(greeting);
+  nav.appendChild(logout);
+}
+
+// fetch fails if the page was opened as a file instead of through the server, that is fine
+fetch('/me')
+  .then(function (response) { return response.json(); })
+  .then(function (data) { update_nav(data.username); })
+  .catch(function () {});
