@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- sign up page, the form posts to /register in servermysqlsimple.js -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | PantherWell</title>
+  <!-- same stylesheet as the rest of the site -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">PantherWell</a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="appointments.html">Find a therapist</a>
+      <a href="register.html" aria-current="page">Register</a>
+      <a href="login.html">Log in</a>
+    </nav>
+
+    <!-- script.js looks for this id, so please do not rename it -->
+    <button id="theme_toggler" class="toggle-btn" type="button" aria-pressed="false">
+      Switch to dark theme
+    </button>
+  </header>
+
+  <!-- auth keeps the form box narrow, see styles.css -->
+  <main class="auth">
+    <section class="panel">
+      <h1>Create an account</h1>
+
+      <form action="/register" method="POST">
+        <label class="field">
+          <span>Username</span>
+          <input type="text" name="username" maxlength="50" autocomplete="username" required>
+        </label>
+
+        <!-- type=email makes the browser check the format -->
+        <label class="field">
+          <span>E-mail</span>
+          <input type="email" name="email" maxlength="100" autocomplete="email" required>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <!-- new-password lets password managers suggest a strong one -->
+          <input type="password" name="password" autocomplete="new-password" required>
+        </label>
+
+        <!-- sends the form to the server -->
+        <button class="primary-btn" type="submit">Register</button>
+      </form>
+
+      <p class="muted">Already have an account? <a href="login.html">Log in here</a>.</p>
+    </section>
+  </main>
+
+  <!-- theme switcher, loaded last so the button exists -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -524,3 +524,14 @@ legend {
     transition: none;
   }
 }
+
+/* ---------- register and log in pages ---------- */
+/* keep the form narrow and centered instead of stretching across the page */
+.auth {
+  max-width: 420px;
+}
+
+.auth h1 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}

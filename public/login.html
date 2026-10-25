@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- log in page, the form posts to /login in servermysqlsimple.js -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in | PantherWell</title>
+  <!-- same stylesheet as the rest of the site -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">PantherWell</a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="appointments.html">Find a therapist</a>
+      <a href="register.html">Register</a>
+      <a href="login.html" aria-current="page">Log in</a>
+    </nav>
+
+    <!-- script.js looks for this id, so please do not rename it -->
+    <button id="theme_toggler" class="toggle-btn" type="button" aria-pressed="false">
+      Switch to dark theme
+    </button>
+  </header>
+
+  <!-- auth keeps the form box narrow, see styles.css -->
+  <main class="auth">
+    <section class="panel">
+      <h1>Log in</h1>
+
+      <form action="/login" method="POST">
+        <label class="field">
+          <span>Username</span>
+          <!-- name must be username, that is what /login reads -->
+          <input type="text" name="username" maxlength="50" autocomplete="username" required>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+
+        <!-- sends the form to the server -->
+        <button class="primary-btn" type="submit">Log in</button>
+      </form>
+
+      <p class="muted">New here? <a href="register.html">Create an account</a>.</p>
+    </section>
+  </main>
+
+  <!-- theme switcher, loaded last so the button exists -->
+  <script src="script.js"></script>
+</body>
+</html>
