@@ -81,8 +81,9 @@ a {
 
 .nav {
   display: flex;
+  flex: 1;
+  align-items: center;
   gap: 1.25rem;
-  margin-right: auto; /* pushes the theme button to the far right */
 }
 
 .nav a {
@@ -538,5 +539,19 @@ legend {
 
 /* the "Hi, name" text in the nav once someone logs in */
 .nav .greeting {
+  margin-left: auto; /* separates account controls from the main page links */
   color: var(--muted-text);
+}
+
+/* on narrow screens the nav gets its own row and the account links stay readable */
+@media (max-width: 700px) {
+  .nav {
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+  }
+
+  .nav .greeting {
+    margin-left: 0;
+  }
 }
