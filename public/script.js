@@ -69,7 +69,7 @@ retrieve_theme();
    out visitors off the pages where this shows up.
    ---------------------------------------------------------- */
 
-// adds the greeting and Log out link for whoever is logged in
+// adds the greeting, Profile link and Log out link for whoever is logged in
 function update_nav(username) {
   var nav = document.querySelector('.nav');
   if (!nav || !username) {
@@ -81,11 +81,24 @@ function update_nav(username) {
   greeting.className = 'greeting';
   greeting.textContent = 'Hi, ' + username;
 
-  var logout = document.createElement('a');
-  logout.href = '/logout';
-  logout.textContent = 'Log out';
+  //the profile endpoint reads the same username from the server-side session
+  var profile = nav.querySelector('a[href="/profile"]');
+  if (!profile) {
+    profile = document.createElement('a');
+    profile.href = '/profile';
+    profile.textContent = 'Profile';
+  }
+
+  var logout = nav.querySelector('a[href="/logout"]');
+  if (!logout) {
+    logout = document.createElement('a');
+    logout.href = '/logout';
+    logout.textContent = 'Log out';
+  }
 
   nav.appendChild(greeting);
+  //appendChild also moves existing links, keeping the account links together
+  nav.appendChild(profile);
   nav.appendChild(logout);
 }
 

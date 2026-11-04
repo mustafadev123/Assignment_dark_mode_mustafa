@@ -212,11 +212,57 @@ app.get("/me", function(req, res)
 	res.json({ username: req.session.username || null });
 });
 
-//forget the user and send them back to log in
+//profile is a second page that proves the username survived in the session
+app.get("/profile", function(req, res)
+{
+	//a visitor without a login session must authenticate before seeing a profile
+	if(!req.session.username)
+		return res.redirect("/login.html");
+
+	res.set("Cache-Control", "no-store"); //do not show the profile from cache after logout
+	let username = escapeHtml(req.session.username);
+	res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | PantherWell</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/index.html">PantherWell</a>
+    <nav class="nav" aria-label="Main">
+      <a href="/index.html">Home</a>
+      <a href="/appointments.html">Find a therapist</a>
+      <a href="/profile" aria-current="page">Profile</a>
+      <a href="/logout">Log out</a>
+    </nav>
+    <button id="theme_toggler" class="toggle-btn" type="button" aria-pressed="false">
+      Switch to dark theme
+    </button>
+  </header>
+  <main class="auth">
+    <section class="panel">
+      <h1>Your profile</h1>
+      <p>You are logged in as <strong>${username}</strong>.</p>
+      <p class="muted">This username was loaded from your server-side session.</p>
+      <a class="primary-btn" href="/logout">Log out</a>
+    </section>
+  </main>
+  <script src="/script.js"></script>
+</body>
+</html>`);
+});
+
+//forget the user, remove its cookie, and send the visitor back to log in
 app.get("/logout", function(req, res)
 {
-	req.session.destroy(function()
+	req.session.destroy(function(err)
 	{
+		if(err)
+			return res.status(500).send(messagePage("Logout failed",
+				"We could not log you out. Please try again.", "/profile", "Back to profile"));
 		res.clearCookie("connect.sid"); //connect.sid is the cookie name express-session uses
 		res.redirect("/login.html");
 	});
